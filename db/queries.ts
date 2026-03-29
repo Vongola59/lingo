@@ -266,7 +266,7 @@ export const getUserSubscription = cache(async () => {
       // 核心业务逻辑：判断订阅是否有效
       const isActive =
         !!data.stripePriceId && // 存在Stripe价格ID（排除免费订阅/测试订阅）
-        ACTIVE_SUBSCRIPTION_STATUSES.has(data.stripeStatus) && // 只给活跃/试用状态提供权益
+        ACTIVE_SUBSCRIPTION_STATUSES.has(data.stripeStatus || "") && // 只给活跃/试用状态提供权益
         data.stripeCurrentPeriodEnd!.getTime() + DAY_IN_MS > Date.now();// 订阅到期时间+1天缓冲期 > 当前时间：避免到期当天立即失效，提升用户体验
       // 返回订阅信息+是否有效标识，业务层直接使用isActive判断权益
       return {
