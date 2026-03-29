@@ -1,27 +1,18 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
-import { NextResponse } from 'next/server'
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+
+const isPublicRoute = createRouteMatcher(["/", "/api/webhooks/stripe"]);
 
 export default clerkMiddleware(async (auth, request) => {
-  if (request.nextUrl.pathname.startsWith('/api')) {
-    return NextResponse.next()
+  if (!isPublicRoute(request)) {
+    await auth.protect();
   }
-
-  const publicPaths = ['/']
-  if (publicPaths.includes(request.nextUrl.pathname)) {
-    return NextResponse.next()
-  }
-
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.redirect(new URL('/', request.url))
-  }
-
-  return NextResponse.next()
-})
+});
 
 export const config = {
   matcher: [
-    '/((?!_next|.*\\..*).*)',
+    // 匹配所有非静态文件的路径
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // 始终开启 API 路由
     '/(api|trpc)(.*)',
   ],
-}
+};
