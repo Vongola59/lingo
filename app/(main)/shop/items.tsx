@@ -26,7 +26,6 @@ export const Items = ({
     if (pending || hearts === 5 || points < POINTS_TO_REFILL) {
       return;
     }
-
     startTransition(() => {
       refillHearts()
         .catch(() => toast.error("Something went wrong"));
@@ -65,6 +64,7 @@ export const Items = ({
             pending
             || hearts === 5 
             || points < POINTS_TO_REFILL
+            || hasActiveSubscription
           }
         >
           {hearts === 5

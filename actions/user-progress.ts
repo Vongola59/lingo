@@ -76,7 +76,6 @@ export const reduceHearts = async (challengeId: number) => {
   if (currentUserProgress.hearts === 0) {
     return { error: "hearts" };//如果没有爱心了，返回错误提示用户爱心不足
   }
-
   if (userSubscription?.isActive) {
     return { error: "subscription" };//如果用户是付费订阅者，返回错误提示用户无需扣心
   }
