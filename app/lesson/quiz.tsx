@@ -1,11 +1,15 @@
 "use client";
 import { useCallback, useMemo, useRef } from 'react';
 import { toast } from "sonner";
+import dynamic from "next/dynamic";
 import Image from "next/image";
-import Confetti from "react-confetti";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useAudio, useWindowSize, useMount } from "react-use";
+
+const Confetti = dynamic(() => import("react-confetti"), {
+  loading: () => null,
+});
 import { reduceHearts } from "@/actions/user-progress";
 import { challengeOptions, challenges } from "@/db/schema";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";

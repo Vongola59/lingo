@@ -1,3 +1,9 @@
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
@@ -31,8 +37,30 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
+      },
     ];
+  },
+  images: {
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
+  experimental: {
+    optimizeCss: true,
   },
 };
 
-export default nextConfig;
+export default bundleAnalyzer(nextConfig);
